@@ -1,9 +1,14 @@
 import type { MetadataRoute } from "next";
 import { getPublishedArticles } from "@/lib/knowledge";
 import { getPublishedProducts } from "@/lib/products";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl, isIndexingAllowed } from "@/lib/site";
 
+/** 建置中回傳空 sitemap，避免提早暴露 URL 清單 */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  if (!isIndexingAllowed()) {
+    return [];
+  }
+
   const staticRoutes: MetadataRoute.Sitemap = [
     "",
     "/about",
