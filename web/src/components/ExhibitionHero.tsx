@@ -177,7 +177,7 @@ export function ExhibitionHero() {
     };
 
     const performTransition = (direction: Direction) => {
-      if (stateRef.current.isAnimating || exhibitionSlides.length === 0) return;
+      if (stateRef.current.isAnimating) return;
 
       stateRef.current.isAnimating = true;
       const nextIndex = stateRef.current.currentIndex;
