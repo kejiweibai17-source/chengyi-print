@@ -26,7 +26,7 @@ const serviceLinks = [
 const guideLinks = [
   { label: "印刷相關知識", href: "/knowledge" },
   { label: "常見問題", href: "/faq" },
-  { label: "會員中心", href: "/member" },
+  { label: "會員中心", href: "/demo/member" },
   { label: "收藏", href: "/favorites" },
   { label: "購物車", href: "/cart" },
 ];
@@ -133,7 +133,7 @@ export function SiteFooter() {
       {/* 登入｜購物車：購物車改橘色 */}
       <div className="grid grid-cols-2">
         <Link
-          href="/member"
+          href="/demo/member"
           className="flex h-14 items-center justify-center gap-2 bg-white text-[13px] tracking-[0.08em] text-[#2c2825] transition-opacity hover:opacity-85 md:h-16"
         >
           <UserIcon className="h-[18px] w-[18px]" />

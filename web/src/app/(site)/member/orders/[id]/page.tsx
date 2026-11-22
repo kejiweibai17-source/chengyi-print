@@ -39,7 +39,7 @@ export default async function MemberOrderDetailPage({ params }: Props) {
       <section className="border-b border-line">
         <div className="mx-auto max-w-6xl px-5 py-8 md:px-8 md:py-10">
           <Link
-            href="/member"
+            href="/demo/member"
             className="text-sm text-mute transition-colors hover:text-brand"
           >
             ← 回到會員中心

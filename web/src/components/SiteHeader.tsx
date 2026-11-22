@@ -347,7 +347,7 @@ export function SiteHeader() {
 
             {/* 登入 */}
             <Link
-              href="/member"
+              href="/demo/member"
               className="flex min-h-[72px] flex-col items-center justify-center gap-1 border-r border-[#e5e5e5] transition-colors hover:bg-[#fafafa]"
               onMouseEnter={() => setActiveMenu(null)}
             >
@@ -427,7 +427,7 @@ export function SiteHeader() {
 
             <div className="relative z-[110] flex items-center gap-1">
               <Link
-                href="/member"
+                href="/demo/member"
                 className="flex h-10 w-10 items-center justify-center"
                 aria-label="登入"
               >

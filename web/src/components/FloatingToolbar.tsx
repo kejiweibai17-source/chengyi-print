@@ -21,7 +21,7 @@ const items = [
   {
     id: "member",
     label: "會員",
-    href: "/member",
+    href: "/demo/member",
     icon: (
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" aria-hidden>
         <circle cx="12" cy="8" r="3.2" stroke="currentColor" strokeWidth="1.6" />

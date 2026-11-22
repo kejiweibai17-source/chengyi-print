@@ -63,7 +63,7 @@ export const megaMenuPanels: Record<string, MegaMenuPanel> = {
       },
       {
         label: "會員中心",
-        href: "/member",
+        href: "/demo/member",
         image: "/images/print-10.png",
         imageAlt: "會員中心",
       },
@@ -301,7 +301,7 @@ export const navItems: readonly NavItem[] = [
     label: "印刷相關知識",
     href: "/knowledge",
   },
-  { label: "會員中心", href: "/member" },
+  { label: "會員中心", href: "/demo/member" },
 ] as const;
 
 /** 首頁主圖：使用 public/images 實拍膠卷合成圖 */
