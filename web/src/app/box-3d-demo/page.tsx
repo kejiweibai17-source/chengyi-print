@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Box3DDemo } from "@/components/box3d/Box3DDemo";
 
 export const metadata: Metadata = {
@@ -7,5 +8,15 @@ export const metadata: Metadata = {
 };
 
 export default function Box3DDemoPage() {
-  return <Box3DDemo />;
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-dvh items-center justify-center bg-[#e8ecf1] text-[14px] text-[#5c6570]">
+          載入 3D 預覽…
+        </div>
+      }
+    >
+      <Box3DDemo />
+    </Suspense>
+  );
 }

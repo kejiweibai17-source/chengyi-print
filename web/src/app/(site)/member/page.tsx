@@ -3,8 +3,9 @@ import { StatusBadge } from "@/components/member/StatusBadge";
 import { demoMember, memberOrders, statusHint } from "@/data/member";
 
 export const metadata = {
-  title: "會員中心｜橙益印刷",
+  title: "會員中心",
   description: "查看訂單、檢稿進度、上傳補件與轉帳回報",
+  robots: { index: false, follow: false },
 };
 
 export default function MemberPage() {

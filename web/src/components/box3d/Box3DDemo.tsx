@@ -6,7 +6,8 @@ import {
   Environment,
   OrbitControls,
 } from "@react-three/drei";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { FlipTopMailer } from "./FlipTopMailer";
 import { InsertDivider } from "./InsertDivider";
 import type { MailerFinish, ProcessOverride } from "./PanelTreeView";
@@ -332,6 +333,8 @@ function DimField({
 }
 
 export function Box3DDemo() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [shape, setShape] = useState<ShapeId>("mailer");
   const [length, setLength] = useState(202);
   const [width, setWidth] = useState(315);
@@ -350,6 +353,12 @@ export function Box3DDemo() {
   const [sizeMode, setSizeMode] = useState<"manufacture" | "inner">(
     "manufacture",
   );
+
+  const backHref = useMemo(() => {
+    const from = searchParams.get("from");
+    if (from && from.startsWith("/products/")) return from;
+    return "/products";
+  }, [searchParams]);
 
   const mat = MATERIALS.find((m) => m.id === materialId) ?? MATERIALS[0];
 
@@ -439,13 +448,14 @@ export function Box3DDemo() {
       {/* Top bar — Packhelp-style */}
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#d5dbe3] bg-white px-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <a
-            href="/"
+          <button
+            type="button"
+            onClick={() => router.push(backHref)}
             className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#e2e7ee] text-[#5c6570] hover:bg-[#f4f6f9]"
-            aria-label="回首頁"
+            aria-label="回產品頁"
           >
             ←
-          </a>
+          </button>
           <div className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2563eb] text-sm font-bold text-white">
               橙

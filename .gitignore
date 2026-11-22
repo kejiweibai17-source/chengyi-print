@@ -12,3 +12,9 @@ web/.next/
 # 合約、報價與會議紀錄不上公開倉庫
 *.pdf
 *.docx
+
+# 根目錄暫存圖檔／PSD（正式圖放 web/public/images）
+*.psd
+/Unknown.png
+/print-01.png
+/袋子.png

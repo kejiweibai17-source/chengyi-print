@@ -9,6 +9,17 @@ import type {
   UpdateParams,
 } from "@refinedev/core";
 import { seedDatabase } from "../data/seed";
+import { revalidateSite } from "../lib/revalidateSite";
+
+async function notifyKnowledgeChange(slug?: unknown) {
+  await revalidateSite({ tag: "knowledge", path: "/knowledge" });
+  if (typeof slug === "string" && slug) {
+    await revalidateSite({
+      tag: `knowledge:${slug}`,
+      path: `/knowledge/${slug}`,
+    });
+  }
+}
 
 type Store = Record<string, BaseRecord[]>;
 
@@ -100,11 +111,21 @@ export const memoryDataProvider = {
 
   create: async ({ resource, variables }: CreateParams) => {
     const id = nextId(resource);
+    const today = new Date().toISOString().slice(0, 10);
     const row = {
       ...(variables as BaseRecord),
       id,
+      ...(resource === "knowledge"
+        ? {
+            publishedAt: (variables as BaseRecord).publishedAt ?? today,
+            updatedAt: today,
+          }
+        : {}),
     };
     store[resource] = [...(store[resource] ?? []), row];
+    if (resource === "knowledge") {
+      void notifyKnowledgeChange((row as BaseRecord).slug);
+    }
     return { data: clone(row) };
   },
 
@@ -114,13 +135,18 @@ export const memoryDataProvider = {
     if (index < 0) {
       return Promise.reject(new Error(`${resource} #${id} not found`));
     }
-    const row = {
+    const today = new Date().toISOString().slice(0, 10);
+    const row: BaseRecord = {
       ...rows[index],
       ...(variables as BaseRecord),
       id: rows[index].id,
+      ...(resource === "knowledge" ? { updatedAt: today } : {}),
     };
     rows[index] = row;
     store[resource] = rows;
+    if (resource === "knowledge") {
+      void notifyKnowledgeChange(row.slug);
+    }
     return { data: clone(row) };
   },
 
@@ -132,6 +158,9 @@ export const memoryDataProvider = {
     }
     const [removed] = rows.splice(index, 1);
     store[resource] = rows;
+    if (resource === "knowledge") {
+      void notifyKnowledgeChange(removed?.slug);
+    }
     return { data: clone(removed) };
   },
 

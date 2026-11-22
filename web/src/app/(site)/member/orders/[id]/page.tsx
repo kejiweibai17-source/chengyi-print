@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Props) {
   const order = getOrderById(id);
   return {
     title: order ? `${order.orderNo}｜會員訂單` : "訂單不存在",
+    robots: { index: false, follow: false },
   };
 }
 

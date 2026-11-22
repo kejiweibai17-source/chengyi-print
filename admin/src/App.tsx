@@ -1,4 +1,5 @@
 import {
+  BookOutlined,
   DashboardOutlined,
   FileTextOutlined,
   QuestionCircleOutlined,
@@ -29,6 +30,10 @@ import { FaqCreate } from "./pages/faq/create";
 import { FaqEdit } from "./pages/faq/edit";
 import { FaqList } from "./pages/faq/list";
 import { FaqShow } from "./pages/faq/show";
+import { KnowledgeCreate } from "./pages/knowledge/create";
+import { KnowledgeEdit } from "./pages/knowledge/edit";
+import { KnowledgeList } from "./pages/knowledge/list";
+import { KnowledgeShow } from "./pages/knowledge/show";
 import { MemberCreate } from "./pages/members/create";
 import { MemberEdit } from "./pages/members/edit";
 import { MemberList } from "./pages/members/list";
@@ -106,6 +111,17 @@ function RefineRoot() {
           },
         },
         {
+          name: "knowledge",
+          list: "/knowledge",
+          create: "/knowledge/create",
+          edit: "/knowledge/edit/:id",
+          show: "/knowledge/show/:id",
+          meta: {
+            label: "印刷相關知識",
+            icon: <BookOutlined />,
+          },
+        },
+        {
           name: "members",
           list: "/members",
           create: "/members/create",
@@ -163,6 +179,13 @@ function RefineRoot() {
             <Route path="create" element={<FaqCreate />} />
             <Route path="edit/:id" element={<FaqEdit />} />
             <Route path="show/:id" element={<FaqShow />} />
+          </Route>
+
+          <Route path="knowledge">
+            <Route index element={<KnowledgeList />} />
+            <Route path="create" element={<KnowledgeCreate />} />
+            <Route path="edit/:id" element={<KnowledgeEdit />} />
+            <Route path="show/:id" element={<KnowledgeShow />} />
           </Route>
 
           <Route path="members">

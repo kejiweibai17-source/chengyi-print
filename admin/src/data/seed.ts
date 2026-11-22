@@ -20,6 +20,13 @@ export const FAQ_CATEGORIES = [
   "會員帳戶",
 ] as const;
 
+export const KNOWLEDGE_CATEGORIES = [
+  "檔案規格",
+  "下單流程",
+  "包裝盒 3D",
+  "印刷知識",
+] as const;
+
 export function seedDatabase(): Record<string, BaseRecord[]> {
   return {
     categories: [
@@ -223,6 +230,56 @@ export function seedDatabase(): Record<string, BaseRecord[]> {
         question: "購物車結帳後還能改規格嗎？",
         answer: "建立訂單後若尚未進入印製，可聯繫客服協助調整或作廢重下。",
         sort: 2,
+      },
+    ],
+    knowledge: [
+      {
+        id: 1,
+        slug: "pdf-bleed-and-safe-zone",
+        title: "完稿出血與安全區怎麼抓？",
+        summary:
+          "印刷檔常見的出血 3mm、安全區與文字距離裁切線的基本規則，避免裁切後文字被切到。",
+        body: "印刷檔若沒有預留出血，裁切時容易露出白邊或切到重要內容。\n\n一般建議：\n1. 出血（bleed）四周各預留約 3mm。\n2. 重要文字與 Logo 請放在安全區內，距離裁切線至少 3～5mm。\n3. 匯出 PDF 時勾選含出血與裁切標記，方便檢稿。",
+        coverImage:
+          "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=1600&q=80",
+        coverAlt: "設計完稿與文件標記",
+        category: "檔案規格",
+        sort: 1,
+        status: "上架",
+        publishedAt: "2026-10-20",
+        updatedAt: "2026-10-20",
+      },
+      {
+        id: 2,
+        slug: "zip-upload-and-file-naming",
+        title: "整包 ZIP 上傳與檔名建議",
+        summary:
+          "多款商品一次下單時，用 ZIP 打包並清楚命名，可加快員工分款與檢稿速度。",
+        body: "若同一訂單有多款品項，可整包壓縮成 ZIP 上傳，由員工於後台分款後逐款檢稿。",
+        coverImage:
+          "https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1600&q=80",
+        coverAlt: "印刷廠作業場景",
+        category: "下單流程",
+        sort: 2,
+        status: "上架",
+        publishedAt: "2026-10-22",
+        updatedAt: "2026-10-22",
+      },
+      {
+        id: 3,
+        slug: "packaging-box-3d-preview-notes",
+        title: "包裝盒 3D 預覽注意事項",
+        summary:
+          "3D 為外觀與比例示意，不代表已通過結構驗證或可直接生產；確認後再送出詢價。",
+        body: "包裝盒 3D 預覽可調整尺寸並旋轉縮放，也可上傳 Logo PNG 做基本貼圖示意。\n\n3D 僅供外觀與比例溝通，實際材質與成品仍需專人確認。",
+        coverImage:
+          "https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1600&q=80",
+        coverAlt: "包裝盒產品陳列",
+        category: "包裝盒 3D",
+        sort: 3,
+        status: "上架",
+        publishedAt: "2026-10-28",
+        updatedAt: "2026-10-28",
       },
     ],
     members: [

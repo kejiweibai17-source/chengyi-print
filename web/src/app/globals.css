@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --ink: #141210;
-  --ink-soft: #3d3832;
-  --paper: #f7f4ef;
-  --paper-deep: #ebe6dc;
+  --ink: #393836;
+  --ink-soft: #595959;
+  --paper: #ffffff;
+  --paper-deep: #ffffff;
   --brand: #e85a12;
   --brand-deep: #c4470a;
-  --line: rgba(20, 18, 16, 0.12);
-  --mute: #7a736a;
+  --line: rgba(57, 56, 54, 0.12);
+  --mute: #8a8a8a;
 }
 
 @theme inline {
@@ -20,8 +20,16 @@
   --color-brand-deep: var(--brand-deep);
   --color-line: var(--line);
   --color-mute: var(--mute);
-  --font-sans: var(--font-sans-tc);
-  --font-display: var(--font-display-tc);
+  /* 對齊參考站：PingFang / Hiragino → Noto 後備 */
+  --font-sans:
+    "PingFang TC", "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans GB", var(--font-inter), "Helvetica Neue",
+    var(--font-sans-tc), "Noto Sans TC", system-ui, sans-serif;
+  /* 品牌字標：明朝／宋體 → Noto Serif TC 後備 */
+  --font-display:
+    "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC",
+    "LiSong Pro", "STSong", var(--font-display-tc), "Noto Serif TC",
+    serif;
 }
 
 * {
@@ -36,8 +44,26 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans-tc), "Noto Sans TC", system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 參考站品牌字：粗明朝、緊字距 */
+.font-brand-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-feature-settings: "palt" 1;
+  letter-spacing: 0.02em;
+}
+
+/* 參考站 nav：14px / medium / 0.56px tracking */
+.font-nav {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 16.8px;
+  font-weight: 500;
+  letter-spacing: 0.56px;
 }
 
 a {
@@ -109,7 +135,83 @@ a {
   background: var(--brand);
 }
 
+@keyframes hero-strip-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-strip-col {
+  animation: hero-strip-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 .news-row:hover .news-arrow {
   transform: translateX(4px);
   color: var(--brand);
+}
+
+/* 首頁服務產品區：白底 */
+.services-quality {
+  background-color: #ffffff;
+}
+
+/* Featured：UFLOW 式 ImageReveal（白幕上收 + 圖片放大模糊進場） */
+.featured-curtain {
+  clip-path: inset(0% 0% 0% 0%);
+  animation: featured-curtain 0.75s ease-in-out both;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+.featured-img-zoom {
+  transform: scale(1.28);
+  filter: blur(10px);
+  opacity: 0;
+  animation: featured-img-zoom 2s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--reveal-delay, 0s);
+  will-change: transform, filter, opacity;
+}
+
+.featured-copy-rise {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: featured-copy-rise 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@keyframes featured-curtain {
+  from {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+  to {
+    clip-path: inset(100% 0% 0% 0%);
+  }
+}
+
+@keyframes featured-img-zoom {
+  from {
+    transform: scale(1.28);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@keyframes featured-copy-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
