@@ -12,7 +12,7 @@ export default function Box3DDemoPage() {
     <Suspense
       fallback={
         <div className="flex h-dvh items-center justify-center bg-[#e8ecf1] text-[14px] text-[#5c6570]">
-          載入 3D 預覽…
+          ＣｌａｕｄｅＣｏｄｅ：ＯｐｅｎｉｎＮｅｗＷｉｎｄｏｗ{" "}
         </div>
       }
     >

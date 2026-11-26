@@ -1,18 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import {
-  useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
   type CSSProperties,
 } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { featuredProducts } from "@/data/home";
+import { useSearchParams } from "next/navigation";
+import { featuredProducts } from "@/data/catalog";
+import { ProductSidebar } from "@/components/ProductSidebar";
 import type { ProductRecord } from "@/data/products";
 import { ImageReveal } from "@/components/ImageReveal";
 
@@ -173,20 +172,22 @@ type Props = {
 };
 
 export function ProductListing({ products }: Props) {
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const catFromUrl = searchParams.get("cat") ?? "";
   const [sort, setSort] = useState<SortKey>("newest");
   const [busy, setBusy] = useState(false);
 
-  const category = useMemo(() => {
-    if (!catFromUrl) return "";
-    const match = featuredProducts.find(
-      (c) => c.id === catFromUrl || c.title === catFromUrl,
-    );
-    return match?.title ?? catFromUrl;
-  }, [catFromUrl]);
+  const matchedCat = useMemo(
+    () =>
+      catFromUrl
+        ? featuredProducts.find(
+            (c) => c.id === catFromUrl || c.title === catFromUrl,
+          )
+        : undefined,
+    [catFromUrl],
+  );
+  const category = matchedCat?.title ?? catFromUrl;
+  const activeCatId = matchedCat?.id ?? "";
 
   const filtered = useMemo(() => {
     if (!category) return products;
@@ -217,24 +218,6 @@ export function ProductListing({ products }: Props) {
   const rest = sorted.filter((p) => p.id !== featured?.id);
   const revealKey = `${category || "all"}-${sort}-${sorted.map((p) => p.id).join(",")}`;
 
-  const applyCategory = useCallback(
-    (nextId: string) => {
-      if (busy) return;
-      const currentId =
-        featuredProducts.find((c) => c.title === category)?.id ?? catFromUrl;
-      if ((nextId || "") === (currentId || "")) return;
-
-      setBusy(true);
-      const params = new URLSearchParams(searchParams.toString());
-      if (nextId) params.set("cat", nextId);
-      else params.delete("cat");
-      const qs = params.toString();
-      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
-      window.setTimeout(() => setBusy(false), 900);
-    },
-    [busy, category, catFromUrl, pathname, router, searchParams],
-  );
-
   const onSortChange = (value: SortKey) => {
     if (busy || value === sort) return;
     setBusy(true);
@@ -244,68 +227,10 @@ export function ProductListing({ products }: Props) {
 
   return (
     <div className="bg-[#f7f7f7] text-[#222]">
-      {/* 分類格：點選後 filter + reveal */}
-      <div className="border-b border-[#e5e5e5] bg-[#eeeeee]">
-        <div className="flex flex-col lg:flex-row">
-          <button
-            type="button"
-            onClick={() => applyCategory("")}
-            aria-pressed={!category}
-            disabled={busy}
-            className={`group flex w-full shrink-0 items-center justify-between gap-3 border-b border-white px-5 py-5 text-left transition-colors lg:w-[160px] lg:flex-col lg:items-start lg:justify-center lg:border-r lg:border-b-0 lg:py-8 xl:w-[180px] ${
-              !category ? "bg-white" : "hover:bg-white/70"
-            } disabled:opacity-60`}
-          >
-            <span>
-              <span className="block text-[14px] font-medium tracking-[0.04em]">
-                商品一覽
-              </span>
-              <span className="mt-1 block text-[11px] tracking-[0.08em] text-[#888] uppercase">
-                All Items
-              </span>
-            </span>
-            <span
-              className="text-[#888] transition-transform group-hover:translate-x-0.5"
-              aria-hidden
-            >
-              ›
-            </span>
-          </button>
-
-          <div className="grid min-w-0 flex-1 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
-            {featuredProducts.map((cat) => {
-              const active = category === cat.title;
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => applyCategory(cat.id)}
-                  aria-pressed={active}
-                  disabled={busy}
-                  className={`group flex items-center gap-2.5 border-r border-b border-white px-3 py-3.5 text-left transition-colors xl:px-4 disabled:opacity-60 ${
-                    active ? "bg-white" : "hover:bg-white/70"
-                  }`}
-                >
-                  <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-[#e4e4e4]">
-                    <Image
-                      src={cat.image}
-                      alt={cat.imageAlt}
-                      fill
-                      sizes="36px"
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </span>
-                  <span className="min-w-0 text-[12px] leading-snug tracking-[0.02em] text-[#222]">
-                    {cat.title}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto flex max-w-[1280px] flex-col gap-3 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 md:px-8 md:py-6">
+     <div className="mx-auto flex max-w-[1400px] flex-col lg:flex-row lg:items-start lg:gap-6 lg:px-6 lg:py-6">
+      <ProductSidebar activeCat={activeCatId} />
+      <div className="min-w-0 flex-1">
+      <div className="flex flex-col gap-3 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-0 md:py-6">
         <p className="text-[12px] leading-relaxed text-[#777] md:text-[13px]">
           {category
             ? `目前顯示：${category}（${sorted.length}）`
@@ -326,13 +251,13 @@ export function ProductListing({ products }: Props) {
         </label>
       </div>
 
-      <div className="mx-auto max-w-[1280px] px-0 pb-16 sm:px-6 md:px-8 md:pb-24">
+      <div className="px-0 pb-16 sm:px-6 lg:px-0 md:pb-24">
         {sorted.length === 0 ? (
           <div className="border border-[#e8e8e8] bg-white px-6 py-16 text-center text-[13px] text-[#888]">
             這個分類目前沒有商品。
           </div>
         ) : (
-          <div className="grid grid-cols-2 border border-[#e8e8e8] bg-white md:grid-cols-4 [&>a]:border-r [&>a]:border-b [&>a]:border-[#e8e8e8]">
+          <div className="grid grid-cols-2 border border-[#e8e8e8] bg-white md:grid-cols-3 [&>a]:border-r [&>a]:border-b [&>a]:border-[#e8e8e8]">
             {featured ? (
               <ProductCell
                 key={`${revealKey}-featured`}
@@ -353,6 +278,8 @@ export function ProductListing({ products }: Props) {
           </div>
         )}
       </div>
+      </div>
+     </div>
     </div>
   );
 }

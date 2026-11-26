@@ -5,8 +5,14 @@
   --ink-soft: #595959;
   --paper: #ffffff;
   --paper-deep: #ffffff;
-  --brand: #e85a12;
-  --brand-deep: #c4470a;
+  /* 品牌色（客戶 2026-11-25 指定，數值待印刷對色確認）
+     橘：PANTONE 137 C ≈ #FFA100；深墨綠：CMYK C70 M60 Y80 K65 ≈ #1B2412 */
+  --brand: #ffa100;
+  --brand-deep: #d98600;
+  --brand-ink: #1b2412;
+  --forest: #1b2412;
+  --forest-soft: #2a3720;
+  --cart-yellow: #fff3b0;
   --line: rgba(57, 56, 54, 0.12);
   --mute: #8a8a8a;
 }
@@ -18,6 +24,10 @@
   --color-paper-deep: var(--paper-deep);
   --color-brand: var(--brand);
   --color-brand-deep: var(--brand-deep);
+  --color-brand-ink: var(--brand-ink);
+  --color-forest: var(--forest);
+  --color-forest-soft: var(--forest-soft);
+  --color-cart-yellow: var(--cart-yellow);
   --color-line: var(--line);
   --color-mute: var(--mute);
   /* 對齊參考站：PingFang / Hiragino → Noto 後備 */
@@ -66,9 +76,12 @@ body {
   letter-spacing: 0.56px;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/* 放進 base layer：未分層的 a{color:inherit} 會壓過 Tailwind 的 text-* 顏色 class */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }
 
 ::selection {
@@ -124,9 +137,10 @@ a {
   animation: float-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.toolbar-item:hover {
+.toolbar-item:hover,
+.toolbar-item:focus-visible {
   background: var(--brand);
-  color: white;
+  color: var(--brand-ink);
   border-color: var(--brand);
 }
 
@@ -214,4 +228,12 @@ a {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* 手機選單背景：墨綠底 + 154px 重複顆粒（版型參考 irep.inc：深色底疊 bg-noise、opacity .6；紋理自行生成） */
+.paper-bg {
+  background-color: #0f2119;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='154' height='154'><filter id='n' x='0' y='0' width='100%' height='100%' color-interpolation-filters='sRGB'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' seed='7' stitchTiles='stitch'/><feColorMatrix values='0.9 0.9 0.9 0 -0.6  0.9 0.9 0.9 0 -0.6  0.9 0.9 0.9 0 -0.6  0 0 0 0 1'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.045'/></svg>");
+  background-repeat: repeat;
+  background-size: 154px 154px;
 }

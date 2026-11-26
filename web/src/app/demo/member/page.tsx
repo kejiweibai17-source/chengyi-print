@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { FloatingToolbar } from "@/components/FloatingToolbar";
 import { MemberPortalDemo } from "@/components/demo/MemberPortalDemo";
 
 export const metadata: Metadata = {
@@ -8,5 +9,10 @@ export const metadata: Metadata = {
 };
 
 export default function MemberPortalDemoPage() {
-  return <MemberPortalDemo />;
+  return (
+    <>
+      <MemberPortalDemo />
+      <FloatingToolbar />
+    </>
+  );
 }

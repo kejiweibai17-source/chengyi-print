@@ -118,7 +118,7 @@ export function KnowledgeListing({
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-[#fff4ee] sm:h-14 sm:w-14">
               <div className="flex h-full w-full items-center justify-center">
                 <span
-                  className="block h-4 w-4 rotate-45 bg-[#e85a12] sm:h-5 sm:w-5"
+                  className="block h-4 w-4 rotate-45 bg-[#ffa100] sm:h-5 sm:w-5"
                   aria-hidden
                 />
               </div>
@@ -359,7 +359,7 @@ export function KnowledgeListing({
 
                     <div className="mt-2.5 flex items-center gap-2">
                       <span className="relative flex h-5 w-5 items-center justify-center overflow-hidden rounded-full bg-[#fff4ee]">
-                        <span className="block h-2 w-2 rotate-45 bg-[#e85a12]" />
+                        <span className="block h-2 w-2 rotate-45 bg-[#ffa100]" />
                       </span>
                       <div className="min-w-0 text-[11px] leading-tight text-[#999]">
                         <p className="truncate text-[#666]">橙益印刷</p>

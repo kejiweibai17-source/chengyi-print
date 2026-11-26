@@ -13,7 +13,7 @@ export function OrderStatusTimeline({ status }: { status: OrderStatus }) {
             <div
               className={`border px-2 py-3 text-center ${
                 active
-                  ? "border-brand bg-brand text-white"
+                  ? "border-brand bg-brand text-brand-ink"
                   : done
                     ? "border-ink bg-ink text-paper"
                     : "border-line bg-white text-mute"

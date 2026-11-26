@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { setMemberLoggedIn } from "@/lib/memberSession";
 import { useEffect, useRef, useState } from "react";
 import {
   DEMO_ZIP_CONTENTS,
@@ -116,7 +118,14 @@ const PAST_ORDERS: PastOrder[] = [
 ];
 
 export function MemberPortalDemo() {
+  const router = useRouter();
   const store = useDemoStore();
+
+  // Demo：進入會員中心即視為已登入，導覽列會顯示「會員中心」
+  useEffect(() => {
+    setMemberLoggedIn(true);
+  }, []);
+
   const flow = store.flow;
   const publicEvents = store.events.filter((e) => !e.internal);
   const status = customerStatus(flow);
@@ -220,16 +229,21 @@ export function MemberPortalDemo() {
       {/* Top bar */}
       <header className="sticky top-0 z-30 border-b border-[#e3e3e3] bg-white">
         <div className="mx-auto flex h-14 max-w-5xl items-center gap-6 px-4">
-          <button
-            type="button"
-            onClick={() => setView("orders")}
+          {/* Logo → 回官網首頁 */}
+          <Link
+            href="/"
+            aria-label="橙益印刷首頁"
             className="flex items-center gap-2"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#e85a12] text-[13px] font-bold text-white">
-              橙
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/logo/chengyi-mark.png"
+              alt=""
+              aria-hidden
+              className="h-8 w-8 object-contain"
+            />
             <span className="text-[15px] font-bold">橙益印刷</span>
-          </button>
+          </Link>
           <nav className="flex gap-1 text-[13px]">
             {(
               [
@@ -253,6 +267,23 @@ export function MemberPortalDemo() {
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
+            <Link
+              href="/"
+              className="flex h-9 items-center gap-1 rounded-lg bg-[#ffa100] px-3 text-[13px] font-semibold text-[#1b2412] hover:bg-[#d98600]"
+            >
+              <span aria-hidden>←</span>
+              返回首頁
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setMemberLoggedIn(false);
+                router.push("/");
+              }}
+              className="hidden h-9 rounded-lg px-3 text-[13px] text-[#616161] hover:bg-[#f1f1f1] sm:block"
+            >
+              登出
+            </button>
             <div className="relative">
               <button
                 type="button"
@@ -295,7 +326,7 @@ export function MemberPortalDemo() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 py-6">
+      <main className="mx-auto max-w-5xl px-4 py-6 pb-24 lg:pr-24 lg:pb-6">
         {/* Demo hint */}
         <div className="mb-4">
           <Banner tone="info">

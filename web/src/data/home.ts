@@ -1,7 +1,12 @@
+import { catalogMenuItems, featuredProducts } from "@/data/catalog";
+
+export { featuredProducts };
+
 export type NavChild = {
   label: string;
   href: string;
   text?: string;
+  external?: boolean;
 };
 
 export type NavItem = {
@@ -13,6 +18,7 @@ export type NavItem = {
 export type MegaMenuItem = {
   label: string;
   href: string;
+  external?: boolean;
   image: string;
   imageAlt: string;
 };
@@ -55,195 +61,13 @@ export const megaMenuPanels: Record<string, MegaMenuPanel> = {
         image: "/images/print-06.png",
         imageAlt: "公司地點",
       },
-      {
-        label: "常見問題",
-        href: "/faq",
-        image: "/images/print-07.png",
-        imageAlt: "常見問題",
-      },
-      {
-        label: "會員中心",
-        href: "/demo/member",
-        image: "/images/print-10.png",
-        imageAlt: "會員中心",
-      },
     ],
   },
   服務項目: {
-    allHref: "/services",
+    allHref: "/products",
     allLabel: "服務項目",
     allEn: "Services",
-    items: [
-      {
-        label: "印刷下單",
-        href: "/demo/manuscript-flow",
-        image: "/images/print-08.png",
-        imageAlt: "印刷下單",
-      },
-      {
-        label: "設計洽詢",
-        href: "/services/design",
-        image: "/images/print-05.png",
-        imageAlt: "設計洽詢",
-      },
-      {
-        label: "包裝盒 3D",
-        href: "/services/packaging-3d",
-        image: "/images/print-12.png",
-        imageAlt: "包裝盒 3D",
-      },
-      {
-        label: "商品列表",
-        href: "/products",
-        image: "/images/print-10.png",
-        imageAlt: "商品列表",
-      },
-      {
-        label: "名片／卡片",
-        href: "/products/premium-business-card",
-        image:
-          "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=200&q=80",
-        imageAlt: "名片",
-      },
-      {
-        label: "型錄／手冊",
-        href: "/products/catalog-16p",
-        image:
-          "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=80",
-        imageAlt: "型錄",
-      },
-      {
-        label: "包裝盒",
-        href: "/products/lid-base-gift-box",
-        image:
-          "https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=200&q=80",
-        imageAlt: "包裝盒",
-      },
-      {
-        label: "印刷知識",
-        href: "/knowledge",
-        image: "/images/print-08.png",
-        imageAlt: "印刷知識",
-      },
-      {
-        label: "完稿上傳",
-        href: "/demo/manuscript-flow",
-        image: "/images/print-11.png",
-        imageAlt: "完稿上傳",
-      },
-      {
-        label: "設計作品",
-        href: "/about/works",
-        image: "/images/print-04.png",
-        imageAlt: "設計作品",
-      },
-      {
-        label: "合作流程",
-        href: "/about/process",
-        image: "/images/print-03.png",
-        imageAlt: "合作流程",
-      },
-      {
-        label: "聯絡我們",
-        href: "/location",
-        image: "/images/print-06.png",
-        imageAlt: "聯絡我們",
-      },
-    ],
-  },
-  商品一覽: {
-    allHref: "/products",
-    allLabel: "商品一覽",
-    allEn: "All Items",
-    items: [
-      {
-        label: "精品名片",
-        href: "/products/premium-business-card",
-        image:
-          "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=200&q=80",
-        imageAlt: "精品名片",
-      },
-      {
-        label: "企業型錄",
-        href: "/products/catalog-16p",
-        image:
-          "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=200&q=80",
-        imageAlt: "企業型錄",
-      },
-      {
-        label: "天地蓋禮盒",
-        href: "/products/lid-base-gift-box",
-        image:
-          "https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=200&q=80",
-        imageAlt: "天地蓋禮盒",
-      },
-      {
-        label: "包裝盒 3D",
-        href: "/services/packaging-3d",
-        image: "/images/print-12.png",
-        imageAlt: "包裝盒 3D",
-      },
-      {
-        label: "印刷下單",
-        href: "/demo/manuscript-flow",
-        image: "/images/print-08.png",
-        imageAlt: "印刷下單",
-      },
-      {
-        label: "設計洽詢",
-        href: "/services/design",
-        image: "/images/print-05.png",
-        imageAlt: "設計洽詢",
-      },
-      {
-        label: "色票對色",
-        href: "/knowledge/pantone-color-proofing",
-        image: "/images/print-08.png",
-        imageAlt: "色票對色",
-      },
-      {
-        label: "紙材知識",
-        href: "/knowledge/paper-choice-for-business-card",
-        image: "/images/print-10.png",
-        imageAlt: "紙材知識",
-      },
-      {
-        label: "禮盒結構",
-        href: "/knowledge/gift-box-structure-checklist",
-        image: "/images/print-13.png",
-        imageAlt: "禮盒結構",
-      },
-      {
-        label: "完稿出血",
-        href: "/knowledge/pdf-bleed-and-safe-zone",
-        image: "/images/print-11.png",
-        imageAlt: "完稿出血",
-      },
-      {
-        label: "ZIP 上傳",
-        href: "/knowledge/zip-upload-and-file-naming",
-        image: "/images/print-07.png",
-        imageAlt: "ZIP 上傳",
-      },
-      {
-        label: "設計作品",
-        href: "/about/works",
-        image: "/images/print-04.png",
-        imageAlt: "設計作品",
-      },
-      {
-        label: "其他",
-        href: "/faq",
-        image: "/images/print-06.png",
-        imageAlt: "其他",
-      },
-      {
-        label: "禮贈應用",
-        href: "/products/lid-base-gift-box",
-        image: "/images/print-12.png",
-        imageAlt: "禮贈應用",
-      },
-    ],
+    items: catalogMenuItems,
   },
 };
 
@@ -271,37 +95,19 @@ export const navItems: readonly NavItem[] = [
   },
   {
     label: "服務項目",
-    href: "/services",
-    children: [
-      {
-        label: "印刷下單",
-        href: "/demo/manuscript-flow",
-        text: "選商品、規格與加工；整包上傳、分款檢稿後再付款。",
-      },
-      {
-        label: "設計洽詢",
-        href: "/services/design",
-        text: "排版或包裝設計由專人承接，不走線上審稿。",
-      },
-      {
-        label: "包裝盒 3D",
-        href: "/services/packaging-3d",
-        text: "盒型預覽與詢價，外觀示意、不做估價下單。",
-      },
-      {
-        label: "商品列表",
-        href: "/products",
-        text: "名片、型錄、禮盒等商品規格與下單入口。",
-      },
-    ],
+    href: "/products",
+    children: catalogMenuItems.map((c) => ({
+      label: c.label,
+      href: c.href,
+      external: c.external,
+    })),
   },
   { label: "公司地點", href: "/location" },
-  { label: "常見問題", href: "/faq" },
+  { label: "常見問題 FAQ", href: "/faq" },
   {
     label: "印刷相關知識",
     href: "/knowledge",
   },
-  { label: "會員中心", href: "/demo/member" },
 ] as const;
 
 /** 首頁主圖：使用 public/images 實拍膠卷合成圖 */
@@ -595,56 +401,6 @@ export const featuredSets: readonly FeaturedSet[] = [
 export const featuredSlides = featuredSets;
 
 /** 首頁第二區：主要服務產品（六欄分類卡片） */
-export const featuredProducts = [
-  {
-    id: "tote-bag",
-    title: "手提袋",
-    items: ["公版手提袋", "客製化手提袋"],
-    href: "/products?cat=tote-bag",
-    image: "/images/print-09.png",
-    imageAlt: "手提袋",
-  },
-  {
-    id: "digital-print",
-    title: "合版、數位印刷品",
-    items: ["卡片", "扇子", "大圖輸出", "DM型錄", "紅包袋"],
-    href: "/products?cat=digital-print",
-    image: "/images/print-07.png",
-    imageAlt: "合版與數位印刷名片",
-  },
-  {
-    id: "label-sticker",
-    title: "標籤貼紙",
-    items: ["凸版貼紙", "柔版貼紙", "數位貼紙", "特殊膠貼紙"],
-    href: "/products?cat=label-sticker",
-    image: "/images/print-06.png",
-    imageAlt: "標籤貼紙捲",
-  },
-  {
-    id: "color-box",
-    title: "包裝彩盒",
-    items: ["客製彩盒", "公版彩盒", "精裝彩盒", "塑膠彩盒"],
-    href: "/products?cat=color-box",
-    image: "/images/print-03.png",
-    imageAlt: "包裝彩盒",
-  },
-  {
-    id: "folder",
-    title: "資料夾",
-    items: ["PP 資料夾", "公文夾", "資料簿", "夾鏈袋"],
-    href: "/products?cat=folder",
-    image: "/images/print-11.png",
-    imageAlt: "資料夾與平面印刷品",
-  },
-  {
-    id: "shipping-box",
-    title: "紙箱／出貨箱",
-    items: ["瓦楞紙箱", "出貨紙箱", "宅配箱", "加強紙箱"],
-    href: "/products?cat=shipping-box",
-    image: "/images/print-10.png",
-    imageAlt: "紙箱與出貨箱",
-  },
-] as const;
 
 export const footerColumns = [
   {
@@ -666,7 +422,7 @@ export const footerColumns = [
   {
     title: "協助",
     links: [
-      { label: "常見問題", href: "/faq" },
+      { label: "常見問題 FAQ", href: "/faq" },
       { label: "公司地點", href: "/location" },
       { label: "印刷相關知識", href: "/knowledge" },
     ],

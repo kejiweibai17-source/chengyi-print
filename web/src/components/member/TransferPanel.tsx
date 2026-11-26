@@ -118,7 +118,7 @@ export function TransferPanel({ orderAmount, existing, enabled }: Props) {
           <div className="md:col-span-2">
             <button
               type="submit"
-              className="h-10 bg-brand px-5 text-sm text-white transition-colors hover:bg-brand-deep"
+              className="h-10 bg-brand px-5 text-sm text-brand-ink transition-colors hover:bg-brand-deep"
             >
               送出轉帳回報
             </button>

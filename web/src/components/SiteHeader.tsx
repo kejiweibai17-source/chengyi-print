@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { LINE_URL } from "@/data/catalog";
+import { useMemberLoggedIn } from "@/lib/memberSession";
 import {
-  exhibitionSlides,
   megaMenuPanels,
   navItems,
-  services,
   type MegaMenuPanel,
   type NavItem,
 } from "@/data/home";
@@ -19,8 +19,8 @@ const announcement =
 const headerLinks = [
   { label: "首頁", en: "Home", href: "/" },
   { label: "關於橙益", en: "About", href: "/about", menuKey: "關於橙益" },
-  { label: "服務項目", en: "Services", href: "/services", menuKey: "服務項目" },
-  { label: "商品一覽", en: "Products", href: "/products", menuKey: "商品一覽" },
+  { label: "服務項目", en: "Services", href: "/products", menuKey: "服務項目" },
+  { label: "常見問題 FAQ", en: "FAQ", href: "/faq" },
   { label: "印刷知識", en: "Knowledge", href: "/knowledge" },
 ] as const;
 
@@ -91,7 +91,7 @@ function MegaDropdown({
       <Link
         href={panel.allHref}
         onClick={onClose}
-        className="group flex w-[148px] shrink-0 flex-col justify-center border-r border-white px-5 py-8 transition-colors hover:bg-white/70 xl:w-[168px]"
+        className="group flex w-[148px] shrink-0 flex-col justify-center border-r border-white px-5 py-8 transition-colors hover:bg-[#ffa100] xl:w-[168px]"
       >
         <span className="inline-flex items-center gap-1 text-[14px] font-medium tracking-[0.04em] text-[#222]">
           {panel.allLabel}
@@ -109,39 +109,57 @@ function MegaDropdown({
 
       {/* 中：6 欄分類格 */}
       <div className="grid min-w-0 flex-1 grid-cols-3 border-r border-white md:grid-cols-4 xl:grid-cols-6">
-        {panel.items.map((item) => (
-          <Link
-            key={`${item.href}-${item.label}`}
-            href={item.href}
-            onClick={onClose}
-            className="group flex min-h-[72px] items-center gap-2.5 border-r border-b border-white px-3 py-3 transition-colors hover:bg-white xl:min-h-[76px] xl:gap-3 xl:px-4"
-          >
-            <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-[#e8e8e8]">
-              <Image
-                src={item.image}
-                alt={item.imageAlt}
-                fill
-                sizes="40px"
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-            </span>
-            <span className="min-w-0 text-[12px] leading-snug tracking-[0.02em] text-[#222] xl:text-[13px]">
-              {item.label}
-            </span>
-          </Link>
-        ))}
+        {panel.items.map((item) => {
+          const cls =
+            "group flex min-h-[72px] items-center gap-2.5 border-r border-b border-white px-3 py-3 transition-colors hover:bg-[#ffa100] focus-visible:bg-[#ffa100] xl:min-h-[76px] xl:gap-3 xl:px-4";
+          const inner = (
+            <>
+              <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white ring-1 ring-[#e8e8e8]">
+                <Image
+                  src={item.image}
+                  alt={item.imageAlt}
+                  fill
+                  sizes="40px"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </span>
+              <span className="min-w-0 text-[12px] leading-snug tracking-[0.02em] text-[#1b2412] xl:text-[13px]">
+                {item.label}
+              </span>
+            </>
+          );
+          return item.external ? (
+            <a
+              key={`${item.href}-${item.label}`}
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
+              className={cls}
+            >
+              {inner}
+            </a>
+          ) : (
+            <Link
+              key={`${item.href}-${item.label}`}
+              href={item.href}
+              onClick={onClose}
+              className={cls}
+            >
+              {inner}
+            </Link>
+          );
+        })}
       </div>
 
       {/* 右：品牌標誌區 */}
       <div className="relative hidden w-[160px] shrink-0 items-center justify-center lg:flex xl:w-[200px]">
-        <div className="relative flex h-[112px] w-[112px] items-center justify-center rounded-full border border-[#d8d8d8] bg-white/40 xl:h-[128px] xl:w-[128px]">
-          <span
-            className="absolute inset-[18%] rounded-full border border-[#e85a12]/35"
-            aria-hidden
-          />
-          <span
-            className="block h-7 w-7 rotate-45 bg-[#e85a12] xl:h-8 xl:w-8"
-            aria-hidden
+        <div className="relative flex h-[112px] w-[112px] items-center justify-center overflow-hidden rounded-full border border-[#d8d8d8] bg-white p-4 xl:h-[128px] xl:w-[128px]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/logo/chengyi-mark.png"
+            alt="橙益印刷"
+            className="h-full w-full object-contain"
           />
         </div>
       </div>
@@ -156,44 +174,79 @@ function PanelNavGroup({
   item: NavItem;
   onNavigate: () => void;
 }) {
+  const [expanded, setExpanded] = useState(false);
   const hasChildren = Boolean(item.children?.length);
 
-  if (!hasChildren) {
-    return (
-      <div className="border-b border-[#ecece8] py-5">
+  return (
+    <div>
+      <div className="flex items-center">
+        {/* 文字：直接前往該頁（服務項目 → 商品總覽） */}
         <Link
           href={item.href}
           onClick={onNavigate}
-          className="block text-[18px] font-semibold tracking-[0.04em] text-[#393836] transition-colors hover:text-[#e85a12] md:text-[20px]"
+          className="block flex-1 transition-colors hover:text-[#ffa100]"
         >
           {item.label}
         </Link>
-      </div>
-    );
-  }
-
-  return (
-    <div className="border-b border-[#ecece8] py-5">
-      <Link
-        href={item.href}
-        onClick={onNavigate}
-        className="block text-[18px] font-semibold tracking-[0.04em] text-[#393836] transition-colors hover:text-[#e85a12] md:text-[20px]"
-      >
-        {item.label}
-      </Link>
-      <ul className="mt-3 space-y-2.5">
-        {item.children!.map((child) => (
-          <li key={child.href}>
-            <Link
-              href={child.href}
-              onClick={onNavigate}
-              className="block text-[14px] tracking-[0.04em] text-[#6a6a6a] transition-colors hover:text-[#e85a12] md:text-[15px]"
+        {/* 箭頭：另外展開／收合子分類 */}
+        {hasChildren ? (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            aria-label={`${expanded ? "收合" : "展開"}${item.label}`}
+            className="-my-2 flex h-9 w-9 shrink-0 items-center justify-center hover:bg-white/15"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className={`h-5 w-5 transition-transform ${expanded ? "rotate-180" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
             >
-              {child.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </button>
+        ) : null}
+      </div>
+      {hasChildren && expanded ? (
+        <ul className="mt-2 space-y-1">
+          {item.children!.map((child) => {
+            const cls =
+              "flex items-center gap-3 py-2 pl-2 text-[14px] font-medium transition-colors hover:text-[#ffa100]";
+            const dot = (
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#ffa100]"
+              />
+            );
+            return (
+              <li key={child.href}>
+                {child.external ? (
+                  <a
+                    href={child.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={onNavigate}
+                    className={cls}
+                  >
+                    {dot}
+                    {child.label}
+                  </a>
+                ) : (
+                  <Link href={child.href} onClick={onNavigate} className={cls}>
+                    {dot}
+                    {child.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
     </div>
   );
 }
@@ -205,8 +258,8 @@ export function SiteHeader() {
   const [query, setQuery] = useState("");
   const [hidden, setHidden] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
-  const announceRef = useRef<HTMLDivElement>(null);
-  const [menuTop, setMenuTop] = useState(0); // 開選單時公告列仍可見的高度
+  const loggedIn = useMemberLoggedIn();
+  const memberLabel = loggedIn ? "會員中心" : "登入";
 
   const activePanel = activeMenu ? megaMenuPanels[activeMenu] : null;
 
@@ -247,9 +300,6 @@ export function SiteHeader() {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
-    setMenuTop(
-      Math.max(0, announceRef.current?.getBoundingClientRect().bottom ?? 0),
-    );
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
@@ -264,20 +314,19 @@ export function SiteHeader() {
     <>
       {/* 頂部公告列：不跟著 sticky，只在頁面最頂部出現 */}
       <div
-        ref={announceRef}
-        className="bg-[#2c2825] px-4 py-2 text-center text-[11px] leading-relaxed tracking-[0.04em] text-white md:text-[12px]"
+        className="bg-[#1b2412] px-4 py-2 text-center text-[11px] leading-relaxed tracking-[0.04em] text-white md:text-[12px]"
       >
         {announcement}
       </div>
 
       <header
         ref={headerRef}
-        className="sticky top-0 z-50 bg-white text-[#393836] shadow-[0_1px_0_rgba(0,0,0,0.06)] transition-transform duration-500 ease-[cubic-bezier(0.215,0.61,0.355,1)]"
+        className={`sticky top-0 ${open ? "z-[70] bg-transparent" : "z-50 bg-white shadow-[0_1px_0_rgba(0,0,0,0.06)]"} text-[#393836] transition-transform duration-500 ease-[cubic-bezier(0.215,0.61,0.355,1)]`}
         style={{
           transform:
             hidden && !open && !activeMenu
               ? "translateY(-100%)"
-              : "translateY(0)",
+              : "none",
         }}
       >
         {/* Desktop：STAYFUL 格線導覽 */}
@@ -290,15 +339,14 @@ export function SiteHeader() {
             <Link
               href="/"
               aria-label="橙益印刷首頁"
-              className="row-span-2 flex flex-col items-center justify-center gap-2 border-r border-[#e5e5e5] px-3 py-4 transition-colors hover:bg-[#fafafa]"
+              className="row-span-2 flex items-center justify-center border-r border-[#e5e5e5] bg-white p-2.5 transition-opacity hover:opacity-85"
             >
-              <span
-                className="block h-8 w-8 rotate-45 bg-[#e85a12] xl:h-9 xl:w-9"
-                aria-hidden
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/logo/chengyi-logo.png"
+                alt="橙益印刷事業有限公司"
+                className="h-[104px] w-[104px] object-contain xl:h-[116px] xl:w-[116px]"
               />
-              <span className="font-brand-logo text-center text-[15px] leading-tight tracking-[0.04em] xl:text-[16px]">
-                橙益印刷
-              </span>
             </Link>
 
             {/* 導覽格 */}
@@ -308,12 +356,14 @@ export function SiteHeader() {
 
               if (hasMenu) {
                 return (
-                  <button
+                  <Link
                     key={item.href}
-                    type="button"
-                    className={`flex min-h-[72px] flex-col items-center justify-center border-r border-[#e5e5e5] px-2 transition-colors hover:bg-[#fafafa] ${
-                      isActive ? "bg-[#fafafa]" : "bg-white"
+                    href={item.href}
+                    onClick={() => setActiveMenu(null)}
+                    className={`group flex min-h-[72px] flex-col items-center justify-center border-r border-[#e5e5e5] px-2 transition-colors hover:bg-[#ffa100] ${
+                      isActive ? "bg-[#ffa100]" : "bg-white"
                     }`}
+                    aria-haspopup="true"
                     aria-expanded={isActive}
                     onMouseEnter={() => setActiveMenu(item.menuKey)}
                     onFocus={() => setActiveMenu(item.menuKey)}
@@ -321,10 +371,10 @@ export function SiteHeader() {
                     <span className="text-[13px] font-medium tracking-[0.06em] xl:text-[14px]">
                       {item.label}
                     </span>
-                    <span className="mt-1 text-[10px] tracking-[0.08em] text-[#9a9a9a] uppercase xl:text-[11px]">
+                    <span className={`mt-1 text-[10px] tracking-[0.08em] uppercase group-hover:text-[#1b2412] xl:text-[11px] ${isActive ? "text-[#1b2412]" : "text-[#7a7a7a]"}`}>
                       {item.en}
                     </span>
-                  </button>
+                  </Link>
                 );
               }
 
@@ -332,13 +382,13 @@ export function SiteHeader() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex min-h-[72px] flex-col items-center justify-center border-r border-[#e5e5e5] px-2 transition-colors hover:bg-[#fafafa]"
+                  className="group flex min-h-[72px] flex-col items-center justify-center border-r border-[#e5e5e5] px-2 transition-colors hover:bg-[#ffa100]"
                   onMouseEnter={() => setActiveMenu(null)}
                 >
                   <span className="text-[13px] font-medium tracking-[0.06em] xl:text-[14px]">
                     {item.label}
                   </span>
-                  <span className="mt-1 text-[10px] tracking-[0.08em] text-[#9a9a9a] uppercase xl:text-[11px]">
+                  <span className="mt-1 text-[10px] tracking-[0.08em] text-[#7a7a7a] uppercase group-hover:text-[#1b2412] xl:text-[11px]">
                     {item.en}
                   </span>
                 </Link>
@@ -348,17 +398,17 @@ export function SiteHeader() {
             {/* 登入 */}
             <Link
               href="/demo/member"
-              className="flex min-h-[72px] flex-col items-center justify-center gap-1 border-r border-[#e5e5e5] transition-colors hover:bg-[#fafafa]"
+              className="flex min-h-[72px] flex-col items-center justify-center gap-1 border-r border-[#e5e5e5] transition-colors hover:bg-[#ffa100]"
               onMouseEnter={() => setActiveMenu(null)}
             >
               <UserIcon className="h-[18px] w-[18px]" />
-              <span className="text-[10px] tracking-[0.06em]">登入</span>
+              <span className="text-[10px] tracking-[0.06em]">{memberLabel}</span>
             </Link>
 
             {/* 購物車 */}
             <Link
               href="/cart"
-              className="flex min-h-[72px] flex-col items-center justify-center gap-1 bg-[#7a3b35] text-white transition-opacity hover:opacity-90"
+              className="flex min-h-[72px] flex-col items-center justify-center gap-1 bg-[#fff3b0] text-black transition-colors hover:bg-[#ffa100]"
               onMouseEnter={() => setActiveMenu(null)}
             >
               <CartIcon className="h-[18px] w-[18px]" />
@@ -385,7 +435,7 @@ export function SiteHeader() {
 
               <button
                 type="submit"
-                className="col-span-2 flex min-h-[52px] items-center justify-center gap-2 border-t border-[#e5e5e5] bg-[#2c2825] text-[12px] tracking-[0.08em] text-white transition-opacity hover:opacity-90"
+                className="col-span-2 flex min-h-[52px] items-center justify-center gap-2 border-t border-[#e5e5e5] bg-[#1b2412] text-[12px] tracking-[0.08em] text-white transition-opacity hover:opacity-90"
               >
                 <SearchIcon className="h-3.5 w-3.5" />
                 搜尋
@@ -411,56 +461,69 @@ export function SiteHeader() {
         </div>
 
         {/* Mobile / Tablet：精簡頂列 + 搜尋 */}
-        <div className="border-b border-[#e5e5e5] lg:hidden">
+        <div className={`lg:hidden ${open ? "" : "border-b border-[#e5e5e5]"}`}>
           <div className="relative flex h-14 items-center justify-between px-3">
             <Link
               href="/"
               aria-label="橙益印刷首頁"
               className="relative z-[110] flex items-center gap-2"
             >
-              <span
-                className="block h-3.5 w-3.5 rotate-45 bg-[#e85a12]"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/logo/chengyi-mark.png"
+                alt=""
                 aria-hidden
+                className="h-8 w-8 object-contain"
               />
-              <span className="font-brand-logo text-[18px]">橙益印刷</span>
+              <span className={`font-brand-logo text-[18px] ${open ? "text-white" : ""}`}>橙益印刷</span>
             </Link>
 
             <div className="relative z-[110] flex items-center gap-1">
+              {open ? (
+                <a
+                  href={LINE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mr-2 inline-flex h-10 items-center gap-1.5 rounded-full bg-[#ffa100] px-5 text-[14px] font-bold text-[#1b2412]"
+                >
+                  設計洽詢 <span aria-hidden>→</span>
+                </a>
+              ) : null}
               <Link
                 href="/demo/member"
-                className="flex h-10 w-10 items-center justify-center"
-                aria-label="登入"
+                className={`h-10 w-10 items-center justify-center ${open ? "hidden" : "flex"}`}
+                aria-label={memberLabel}
               >
                 <UserIcon className="h-[18px] w-[18px]" />
               </Link>
               <Link
                 href="/cart"
-                className="flex h-10 w-10 items-center justify-center text-[#7a3b35]"
+                className={`h-10 w-10 items-center justify-center bg-[#fff3b0] text-black ${open ? "hidden" : "flex"}`}
                 aria-label="購物車"
               >
                 <CartIcon className="h-[18px] w-[18px]" />
               </Link>
               <button
                 type="button"
-                className="flex h-10 w-10 items-center justify-center"
+                className="flex h-10 w-11 items-center justify-center"
                 aria-label={open ? "關閉選單" : "開啟選單"}
                 aria-expanded={open}
                 onClick={() => setOpen((v) => !v)}
               >
-                <span className="relative block h-3.5 w-[18px]" aria-hidden>
+                <span className="relative block h-[22px] w-8" aria-hidden>
                   <span
-                    className={`absolute left-0 block h-px w-full bg-[#393836] transition-all duration-300 ${
-                      open ? "top-[6px] rotate-45" : "top-0"
+                    className={`absolute left-0 block h-[1.5px] w-full ${open ? "bg-white" : "bg-[#393836]"} transition-all duration-300 ${
+                      open ? "top-[10px] rotate-45" : "top-0"
                     }`}
                   />
                   <span
-                    className={`absolute left-0 top-[6px] block h-px w-full bg-[#393836] transition-opacity duration-300 ${
+                    className={`absolute left-0 top-[10px] block h-[1.5px] w-full ${open ? "bg-white" : "bg-[#393836]"} transition-opacity duration-300 ${
                       open ? "opacity-0" : "opacity-100"
                     }`}
                   />
                   <span
-                    className={`absolute left-0 block h-px w-full bg-[#393836] transition-all duration-300 ${
-                      open ? "top-[6px] -rotate-45" : "top-3"
+                    className={`absolute left-0 block h-[1.5px] w-full ${open ? "bg-white" : "bg-[#393836]"} transition-all duration-300 ${
+                      open ? "top-[10px] -rotate-45" : "top-5"
                     }`}
                   />
                 </span>
@@ -490,7 +553,7 @@ export function SiteHeader() {
             />
             <button
               type="submit"
-              className="flex h-11 shrink-0 items-center gap-1.5 bg-[#2c2825] px-4 text-[12px] tracking-[0.06em] text-white"
+              className="flex h-11 shrink-0 items-center gap-1.5 bg-[#1b2412] px-4 text-[12px] tracking-[0.06em] text-white"
             >
               <SearchIcon className="h-3.5 w-3.5" />
               搜尋
@@ -498,115 +561,65 @@ export function SiteHeader() {
           </form>
         </div>
 
-        {/* 漢堡展開選單 */}
+        {/* 漢堡展開選單：墨綠顆粒底、白色粗體清單（版型參考 irep.inc） */}
         {open ? (
           <div
-            className="fixed inset-0 z-[100] bg-white lg:hidden"
+            className="paper-bg fixed inset-0 z-[100] overflow-y-auto px-[25px] pt-[110px] pb-10 text-white lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="網站選單"
           >
-            <div
-              className="border-b border-[#ebebeb]"
-              style={{ height: `calc(${menuTop}px + 6.25rem)` }}
-            />
-
-            <div
-              className="flex flex-col md:flex-row"
-              style={{ height: `calc(100svh - ${menuTop}px - 6.25rem)` }}
-            >
-              <aside className="flex w-full shrink-0 flex-col border-b border-[#ecece8] md:w-[34%] md:max-w-[420px] md:border-r md:border-b-0">
-                <div className="flex items-center gap-2 border-b border-[#ecece8] px-6 py-4">
-                  <span
-                    className="block h-3 w-3 rotate-45 bg-[#e85a12]"
-                    aria-hidden
-                  />
-                  <span className="font-brand-logo text-[18px] text-[#393836]">
-                    橙益印刷
-                  </span>
-                </div>
-
-                <nav
-                  className="flex-1 overflow-y-auto px-6 py-2"
-                  aria-label="全站選單"
-                >
-                  <div className="border-b border-[#ecece8] py-5">
-                    <Link
-                      href="/"
-                      onClick={() => setOpen(false)}
-                      className="block text-[15px] tracking-[0.06em] text-[#6a6a6a] transition-colors hover:text-[#e85a12]"
-                    >
-                      首頁
-                    </Link>
-                  </div>
-
-                  {navItems.map((item) => (
+            <nav aria-label="全站選單">
+              <ul className="flex flex-col gap-[22px] text-[16px] font-bold">
+                <li>
+                  <Link href="/" onClick={() => setOpen(false)} className="block">
+                    首頁
+                  </Link>
+                </li>
+                {navItems.map((item) => (
+                  <li key={item.href}>
                     <PanelNavGroup
-                      key={item.href}
                       item={item}
                       onNavigate={() => setOpen(false)}
                     />
-                  ))}
-                </nav>
-              </aside>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-              <section className="flex min-h-0 flex-1 flex-col overflow-y-auto bg-[#f7f7f5] px-5 py-6 md:px-10 md:py-8">
-                <div className="mb-6">
-                  <p className="text-[11px] tracking-[0.18em] text-[#e85a12] uppercase">
-                    Featured
-                  </p>
-                  <h2 className="mt-2 text-[1.4rem] font-semibold tracking-tight text-[#393836]">
-                    精選服務與作品
-                  </h2>
-                </div>
+            {/* 分段按鈕：登入／會員中心 | 購物車 */}
+            <div className="mt-[34px] inline-flex gap-0.5 rounded-lg bg-white/50 p-1 text-[12px]">
+              <Link
+                href="/demo/member"
+                onClick={() => setOpen(false)}
+                className="inline-block h-8 w-[77px] rounded bg-white text-center leading-8 text-[#1c3128]"
+              >
+                {memberLabel}
+              </Link>
+              <Link
+                href="/cart"
+                onClick={() => setOpen(false)}
+                className="inline-block h-8 w-[77px] rounded text-center leading-8 text-white hover:bg-white/20"
+              >
+                購物車
+              </Link>
+            </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {services.map((service, index) => (
-                    <Link
-                      key={service.id}
-                      href={service.href}
-                      onClick={() => setOpen(false)}
-                      className="group flex min-h-[140px] flex-col justify-between border border-[#e4e4e0] bg-white px-5 py-5"
-                    >
-                      <div>
-                        <span className="text-[11px] tracking-[0.16em] text-[#b0b0b0] tabular-nums">
-                          0{index + 1}
-                        </span>
-                        <p className="mt-3 text-[16px] font-semibold">
-                          {service.title}
-                        </p>
-                        <p className="mt-2 text-[13px] text-[#6a6a6a]">
-                          {service.text}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-
-                  {exhibitionSlides.slice(0, 1).map((slide) => (
-                    <Link
-                      key={slide.id}
-                      href={slide.href}
-                      onClick={() => setOpen(false)}
-                      className="group relative min-h-[140px] overflow-hidden border border-[#e4e4e0] bg-[#393836] sm:col-span-2"
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={slide.image}
-                        alt={slide.imageAlt}
-                        className="absolute inset-0 h-full w-full object-cover opacity-55"
-                      />
-                      <div className="relative z-[1] flex h-full min-h-[140px] flex-col justify-end bg-gradient-to-t from-black/70 to-transparent px-5 py-5 text-white">
-                        <p className="text-[11px] tracking-[0.16em] text-[#d6ff3a] uppercase">
-                          {slide.eyebrow}
-                        </p>
-                        <p className="mt-2 text-[16px] font-semibold">
-                          {slide.title}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </section>
+            <div className="mt-[105px]">
+              <p className="mb-[7px] text-[13px]">Follow Us</p>
+              <ul className="flex gap-2">
+                <li>
+                  <a
+                    href={LINE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="橙益官方 LINE"
+                    className="flex h-10 w-10 items-center justify-center rounded bg-white/20 text-[12px] font-bold text-white hover:bg-white/30"
+                  >
+                    LINE
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         ) : null}

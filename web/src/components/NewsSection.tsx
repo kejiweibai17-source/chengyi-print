@@ -61,18 +61,18 @@ export function NewsSection() {
       {/* 橘色方案橫幅 */}
       <Link
         href={solutionBanner.href}
-        className="flex w-full items-center justify-center bg-[#f0a12e] px-5 py-5 transition-colors hover:bg-[#e89520] md:px-8 md:py-6"
+        className="flex w-full items-center justify-center bg-[#ffa100] px-5 py-8 transition-colors hover:bg-[#d98600] md:px-8 md:py-14"
       >
         <span className="flex max-w-5xl flex-col items-center gap-3 text-center sm:flex-row sm:gap-5 sm:text-left">
           <SolutionMark />
-          <span className="text-[14px] leading-relaxed font-medium text-[#1a1a1a] md:text-[16px]">
+          <span className="text-[14px] leading-relaxed font-medium text-[#1b2412] md:text-[18px]">
             {solutionBanner.text}
           </span>
         </span>
       </Link>
 
       {/* 黑色 TOPICS 列 */}
-      <div className="bg-[#1a1a1a] text-white">
+      <div className="bg-[#1b2412] text-white">
         <div className="mx-auto flex max-w-6xl items-stretch gap-3 px-4 py-3 md:gap-5 md:px-8 md:py-3.5">
           <p className="hidden shrink-0 self-center text-[12px] font-semibold tracking-[0.18em] uppercase sm:block md:text-[13px]">
             Topics
@@ -82,14 +82,14 @@ export function NewsSection() {
             href="/knowledge"
             className="group flex min-w-0 flex-1 items-center gap-2.5 py-0.5 md:gap-4"
           >
-            <span className="shrink-0 rounded-[3px] bg-[#e85a12] px-2 py-0.5 text-[11px] font-medium tracking-wide text-white md:text-[12px]">
+            <span className="shrink-0 rounded-[3px] bg-[#ffa100] px-2 py-0.5 text-[11px] font-medium tracking-wide text-brand-ink md:text-[12px]">
               {latest.tag}
             </span>
-            <span className="hidden shrink-0 text-[12px] tracking-wider text-white/75 tabular-nums md:inline md:text-[13px]">
+            <span className="hidden shrink-0 text-[12px] tracking-wider text-[#f5f3ea]/90 tabular-nums md:inline md:text-[13px]">
               {latest.date}
             </span>
-            <span className="min-w-0 truncate text-[13px] text-white/95 transition-opacity group-hover:opacity-75 md:text-[14px]">
-              <span className="mr-2 text-white/55 tabular-nums md:hidden">
+            <span className="min-w-0 truncate text-[13px] text-[#f5f3ea] transition-opacity group-hover:opacity-75 md:text-[14px]">
+              <span className="mr-2 text-[#f5f3ea]/70 tabular-nums md:hidden">
                 {latest.date}
               </span>
               {latest.title}
@@ -99,7 +99,7 @@ export function NewsSection() {
           <Link
             href="/knowledge"
             aria-label="查看全部消息"
-            className="flex h-10 w-10 shrink-0 items-center justify-center self-center bg-[#3a7ab8] text-white transition-colors hover:bg-[#2f6a9e] md:h-11 md:w-11"
+            className="flex h-10 w-10 shrink-0 items-center justify-center self-center bg-[#ffa100] text-[#1b2412] transition-colors hover:bg-[#d98600] md:h-11 md:w-11"
           >
             <TopicsListIcon />
           </Link>

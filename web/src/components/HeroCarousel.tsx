@@ -59,7 +59,7 @@ export function HeroCarousel() {
         <div className="animate-hero-rise-delay-2 mt-9 flex flex-wrap items-center gap-4">
           <Link
             href={slide.href}
-            className="inline-flex h-12 items-center bg-brand px-7 text-sm font-medium tracking-wide text-white transition-colors hover:bg-brand-deep"
+            className="inline-flex h-12 items-center bg-brand px-7 text-sm font-medium tracking-wide text-brand-ink transition-colors hover:bg-brand-deep"
           >
             {slide.cta}
           </Link>

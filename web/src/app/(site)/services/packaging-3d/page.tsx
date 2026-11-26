@@ -23,7 +23,7 @@ export default function ServicesPackaging3dPage() {
         </p>
         <Link
           href="/box-3d-demo"
-          className="border border-brand bg-brand px-5 py-3 text-center text-sm text-white hover:bg-brand-deep"
+          className="border border-brand bg-brand px-5 py-3 text-center text-sm text-brand-ink hover:bg-brand-deep"
         >
           開啟 3D 預覽 Demo
         </Link>

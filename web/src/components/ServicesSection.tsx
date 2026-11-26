@@ -4,20 +4,20 @@ import { featuredProducts } from "@/data/home";
 
 export function ServicesSection() {
   return (
-    <section className="services-quality relative overflow-hidden">
+    <section className="relative overflow-hidden bg-[#1b2412]">
       <div className="relative mx-auto max-w-6xl px-5 pt-10 pb-16 md:px-8 md:pt-12 md:pb-24">
         <div className="flex flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
           <div className="max-w-xl">
-            <h2 className="font-brand-logo text-[1.85rem] leading-[1.25] text-[#393836] md:text-[2.35rem]">
+            <h2 className="font-brand-logo text-[1.85rem] leading-[1.25] text-white md:text-[2.35rem]">
               印刷・包裝・設計
             </h2>
-            <p className="mt-3 font-sans text-[14px] leading-relaxed text-[#595959] md:text-[15px]">
+            <p className="mt-3 font-sans text-[14px] leading-relaxed text-[#f5f3ea]/90 md:text-[15px]">
               包裝盒、型錄、名片與客製印刷——線上下單、人工檢稿、包裝盒 3D 詢價。
             </p>
           </div>
           <Link
             href="/services"
-            className="font-nav inline-flex items-center border-b border-[#393836] pb-1 text-[#393836] transition-opacity hover:opacity-55"
+            className="font-nav inline-flex items-center border-b border-[#ffa100] pb-1 text-[#ffa100] transition-opacity hover:opacity-70"
           >
             瀏覽服務項目 →
           </Link>
@@ -57,7 +57,7 @@ export function ServicesSection() {
         <div className="mt-12 flex justify-center md:mt-14">
           <Link
             href="/products"
-            className="inline-flex min-w-[280px] items-center justify-between gap-6 rounded-full bg-[#e85a12] px-7 py-3.5 text-white shadow-sm transition-colors duration-300 hover:bg-[#c4470a] md:min-w-[320px] md:px-8 md:py-4"
+            className="inline-flex min-w-[280px] items-center justify-between gap-6 rounded-full bg-[#ffa100] px-7 py-3.5 text-brand-ink shadow-sm transition-colors duration-300 hover:bg-[#d98600] md:min-w-[320px] md:px-8 md:py-4"
           >
             <span className="flex-1 text-center text-[14px] font-medium tracking-[0.06em] md:text-[15px]">
               查看全部服務產品

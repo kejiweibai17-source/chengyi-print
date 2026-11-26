@@ -20,7 +20,7 @@ export default function CartPage() {
         <p className="text-sm text-mute">購物車尚無商品（骨架頁）。</p>
         <Link
           href="/products"
-          className="mt-6 inline-flex border border-brand bg-brand px-5 py-3 text-sm text-white hover:bg-brand-deep"
+          className="mt-6 inline-flex border border-brand bg-brand px-5 py-3 text-sm text-brand-ink hover:bg-brand-deep"
         >
           瀏覽商品
         </Link>

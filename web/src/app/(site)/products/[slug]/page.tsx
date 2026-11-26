@@ -13,6 +13,8 @@ import {
 import { getPublishedArticles } from "@/lib/knowledge";
 import { getProductGalleryImages } from "@/data/products";
 import { absoluteUrl } from "@/lib/site";
+import { featuredProducts, LINE_URL } from "@/data/catalog";
+import { ProductSidebar } from "@/components/ProductSidebar";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -41,7 +43,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const LINE_URL = "https://line.me/R/ti/p/@717syyqm";
 
 function SectionTitle({ jp, en }: { jp: string; en: string }) {
   return (
@@ -74,6 +75,8 @@ async function ProductDetail({ params }: Props) {
   ];
   const paragraphs = product.longDescription ?? [product.summary, product.description];
   const inquiryOnly = product.orderMode === "人工詢價";
+  const activeCat = featuredProducts.find((c) => c.title === product.category);
+  const activeItem = activeCat?.items.find((n) => product.name.includes(n));
 
   const productLd = {
     "@context": "https://schema.org",
@@ -98,15 +101,9 @@ async function ProductDetail({ params }: Props) {
     <div className="text-[#2f2725]">
       <JsonLd data={productLd} />
 
-      {/* 商品分類列 */}
-      <Link
-        href="/products"
-        className="flex h-[50px] items-center justify-center gap-2 bg-[#eee] text-[12px] tracking-[0.06em] transition-colors hover:bg-[#e6e6e6]"
-      >
-        <span aria-hidden className="text-[10px]">⁝⁝⁝</span>
-        選擇商品分類
-      </Link>
-
+      <div className="mx-auto flex max-w-[1840px] flex-col lg:flex-row lg:items-start lg:gap-0 lg:px-6">
+        <ProductSidebar activeCat={activeCat?.id} activeItem={activeItem} />
+        <div className="min-w-0 flex-1">
       <div className="mx-auto max-w-[1340px] border-x border-[#e5e5e5]">
         {/* 麵包屑 */}
         <nav
@@ -115,8 +112,14 @@ async function ProductDetail({ params }: Props) {
         >
           <Link href="/" className="hover:text-[#2f2725]">首頁</Link>
           <span className="mx-2">/</span>
-          <Link href="/products" className="hover:text-[#2f2725]">商品一覽</Link>
+          <Link href="/products" className="hover:text-[#2f2725]">商品總覽</Link>
           <span className="mx-2">/</span>
+          {activeCat ? (
+            <>
+              <Link href={activeCat.href} className="hover:text-[#2f2725]">{activeCat.title}</Link>
+              <span className="mx-2">/</span>
+            </>
+          ) : null}
           <span className="truncate text-[#2f2725]">{product.name}</span>
         </nav>
 
@@ -301,6 +304,8 @@ async function ProductDetail({ params }: Props) {
             </ul>
           </section>
         )}
+        </div>
+        </div>
       </div>
 
       {/* 商品標籤 */}

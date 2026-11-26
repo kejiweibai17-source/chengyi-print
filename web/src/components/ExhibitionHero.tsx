@@ -385,7 +385,7 @@ export function ExhibitionHero() {
           <div className="min-w-0 overflow-hidden">
             <p
               ref={textEyebrowRef}
-              className="text-[11px] tracking-[0.18em] text-[#d6ff3a] uppercase"
+              className="text-[11px] tracking-[0.18em] text-[#ffa100] uppercase"
             >
               {exhibitionSlides[0].eyebrow}
             </p>
@@ -444,7 +444,7 @@ export function ExhibitionHero() {
                   aria-label={`切換至 ${item.title}`}
                   className={`h-2.5 w-2.5 rounded-full transition-all ${
                     i === index
-                      ? "bg-[#d6ff3a] ring-1 ring-[#d6ff3a] ring-offset-2 ring-offset-[#141414]"
+                      ? "bg-[#ffa100] ring-1 ring-[#ffa100] ring-offset-2 ring-offset-[#141414]"
                       : "bg-white/35 hover:bg-white/60"
                   }`}
                 />

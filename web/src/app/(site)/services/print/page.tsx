@@ -20,7 +20,7 @@ export default function ServicesPrintPage() {
       <section className="mx-auto flex max-w-3xl flex-col gap-4 px-5 py-12 md:px-8 md:py-16">
         <Link
           href="/products"
-          className="border border-brand bg-brand px-5 py-3 text-center text-sm text-white hover:bg-brand-deep"
+          className="border border-brand bg-brand px-5 py-3 text-center text-sm text-brand-ink hover:bg-brand-deep"
         >
           前往商品列表
         </Link>

@@ -74,11 +74,11 @@ async function ArticleBody({ params }: Props) {
     <>
       <JsonLd data={articleLd} />
       <article>
-        <header className="border-b border-line bg-ink text-paper">
+        <header className="border-b border-line bg-forest text-[#f5f3ea]">
           <div className="mx-auto max-w-3xl px-5 py-10 md:px-8 md:py-14">
             <Link
               href="/knowledge"
-              className="text-sm text-white/60 hover:text-brand"
+              className="text-sm text-[#f5f3ea]/80 hover:text-brand"
             >
               ← 印刷相關知識
             </Link>
@@ -88,8 +88,8 @@ async function ArticleBody({ params }: Props) {
             <h1 className="mt-3 font-[family-name:var(--font-display-tc)] text-3xl font-semibold leading-tight md:text-5xl">
               {article.title}
             </h1>
-            <p className="mt-4 text-sm text-white/65">{article.summary}</p>
-            <p className="mt-6 text-xs text-white/45">
+            <p className="mt-4 text-sm text-[#f5f3ea]/85">{article.summary}</p>
+            <p className="mt-6 text-xs text-[#f5f3ea]/70">
               發布 {article.publishedAt}
               {article.updatedAt !== article.publishedAt
                 ? ` · 更新 ${article.updatedAt}`
